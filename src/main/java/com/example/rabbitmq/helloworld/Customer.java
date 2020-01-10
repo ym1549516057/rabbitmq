@@ -15,7 +15,8 @@ public class Customer {
     public static final String QUEUE_NAME = "hello";
 
     public static void testCustomer() throws IOException, TimeoutException {
-        Channel channel = RabbitCommon.createChannel();
+        Connection connection = null;
+        Channel channel = RabbitCommon.createChannel(connection);
         //生命要关注的队列
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 

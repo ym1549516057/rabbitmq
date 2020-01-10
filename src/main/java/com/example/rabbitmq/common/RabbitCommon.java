@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class RabbitCommon {
 
-    public static Channel createChannel() throws IOException, TimeoutException {
+    public static Channel createChannel(Connection connection) throws IOException, TimeoutException {
 
         //创建连接工厂
         ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -24,14 +24,23 @@ public class RabbitCommon {
         connectionFactory.setPassword("123456");
         connectionFactory.setUsername("test");
         //创建一个新的连接
-        Connection connection = connectionFactory.newConnection();
+        connection = connectionFactory.newConnection();
         //创建一个频道
         Channel channel = connection.createChannel();
         return channel;
     }
 
-    public void close(){
-
+    public static void close(Connection connection, Channel channel) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+            if (channel != null) {
+                channel.close();
+            }
+        } catch (IOException | TimeoutException e) {
+            e.printStackTrace();
+        }
     }
 }
 
