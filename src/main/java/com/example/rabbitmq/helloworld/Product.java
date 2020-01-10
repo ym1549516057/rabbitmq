@@ -14,7 +14,7 @@ import java.util.concurrent.TimeoutException;
 public class Product {
     private static final String QUEUE_NAME = "hello";
 
-    private static void create() throws IOException, TimeoutException {
+    private static void publish() throws IOException, TimeoutException {
         Channel channel = RabbitCommon.createChannel();
         //声明一个队列
         //-- 在RabbitMQ中，队列声明是幂等性的（一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同），
@@ -30,7 +30,7 @@ public class Product {
 
     public static void main(String[] args) {
         try {
-            create();
+            publish();
         } catch (IOException | TimeoutException e) {
             e.printStackTrace();
         }
