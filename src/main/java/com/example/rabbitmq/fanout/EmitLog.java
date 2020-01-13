@@ -1,4 +1,4 @@
-package com.example.rabbitmq.exchange;
+package com.example.rabbitmq.fanout;
 
 import com.example.rabbitmq.common.RabbitCommon;
 import com.rabbitmq.client.BuiltinExchangeType;
