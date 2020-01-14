@@ -1,4 +1,4 @@
-package com.example.rabbitmq.routing;
+package com.example.rabbitmq.direct;
 
 import com.example.rabbitmq.common.RabbitCommon;
 import com.rabbitmq.client.BuiltinExchangeType;
