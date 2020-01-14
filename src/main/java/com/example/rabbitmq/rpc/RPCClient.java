@@ -16,24 +16,21 @@ import java.util.concurrent.TimeoutException;
  * @date 2020/1/13 17:17
  */
 public class RPCClient {
-    private static Connection connection = null;
-    private static Channel channel = null;
     private static String request_queue = "rpc_queue";
+
     /**
      * 回调队列
      */
-    private static String replyQueue = null;
 
 
-    public static String call(String message) throws IOException, InterruptedException, TimeoutException {
-        channel = RabbitCommon.createChannel(connection);
+    private static String call(String message) throws IOException, InterruptedException, TimeoutException {
+        Connection connection = null;
+        Channel channel = RabbitCommon.createChannel(connection);
         //随机成成一个回调队列
-        replyQueue = channel.queueDeclare().getQueue();
+        String replyQueue = channel.queueDeclare().getQueue();
         //随机生成一个ID
         final String corrId = UUID.randomUUID().toString();
 
-        AMQP.BasicProperties basicProperties = new AMQP.BasicProperties.Builder().correlationId(corrId).replyTo(replyQueue).build();
-        channel.basicPublish("", request_queue, basicProperties, message.getBytes(StandardCharsets.UTF_8));
 
         //生命一个消费者来消费回调队列
         Consumer consumer = new DefaultConsumer(channel) {
@@ -45,20 +42,24 @@ public class RPCClient {
                 }
             }
         };
+
         //监听回调队列
         channel.basicConsume(replyQueue, true, consumer);
+
+        AMQP.BasicProperties basicProperties = new AMQP.BasicProperties.Builder().correlationId(corrId).replyTo(replyQueue).build();
+        channel.basicPublish("", request_queue, basicProperties, message.getBytes(StandardCharsets.UTF_8));
         return null;
     }
 
     public static void main(String[] args) {
         try {
-            System.out.println("RPCClient [x] Requesting fib(30)");
-            call("20");
+//            System.out.println("RPCClient [x] Requesting fib(30)");
+            for (int i = 1; i < 5; i++) {
+                call(i + "0");
+            }
 //            System.out.println("RPCClient [.] Got '" + response + "'");
         } catch (IOException | InterruptedException | TimeoutException e) {
             e.printStackTrace();
-        } finally {
-            RabbitCommon.close(connection, channel);
         }
     }
 }

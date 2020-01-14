@@ -40,7 +40,7 @@ public class Client {
             String rpc_queuqu = "rpc_queue";
 //            String message = "Hello RabbitMQ";
             AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder().correlationId(correlationId).replyTo(reyply_to_queue).build();
-            channel.basicPublish("", rpc_queuqu, properties, message.getBytes("UTF-8"));
+            channel.basicPublish("", rpc_queuqu, properties, message.getBytes(StandardCharsets.UTF_8));
             System.out.println("已发出请求请求消息：" + message);
         } catch (IOException | TimeoutException e) {
             e.printStackTrace();

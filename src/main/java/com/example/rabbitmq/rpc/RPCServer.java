@@ -57,7 +57,7 @@ public class RPCServer {
                     //处理完后  发送消息确认
                     channel.basicAck(envelope.getDeliveryTag(), false);
                 }
-                RabbitCommon.close(connection, channel);
+//                RabbitCommon.close(connection, channel);
             }
         };
         //采用应答模式监听，处理完后才从请求队列中删除请求
